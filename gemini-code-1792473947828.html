@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>楽譜パート管理 | Part Score Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Dark Theme */
+      --bg: #0b0f19;
+      --card-bg: #151c2c;
+      --card-border: #232d42;
+      --input-bg: #0f1422;
+      --input-border: #2d384e;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-light: rgba(99, 102, 241, 0.15);
+      --danger: #f43f5e;
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --font: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --input-bg: #f1f5f9;
+      --input-border: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --accent: #4f46e5;
+      --accent-hover: #4338ca;
+      --accent-light: rgba(79, 70, 229, 0.1);
+      --danger: #ef4444;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+    }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: white;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-header {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 0.5rem 0.85rem;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+    }
+
+    .btn-header:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* 曲タブバー */
+    .song-tabs-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .song-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.6rem 1.1rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .song-tab.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .song-tab .btn-close-tab {
+      background: transparent;
+      border: none;
+      color: inherit;
+      opacity: 0.7;
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .song-tab .btn-close-tab:hover {
+      opacity: 1;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .btn-add-song {
+      background: var(--input-bg);
+      border: 1px dashed var(--input-border);
+      color: var(--accent);
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-add-song:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .grid-settings {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    @media (max-width: 640px) {
+      .grid-settings {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--text);
+      padding: 0.65rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    /* トグルスイッチスタイル (カッコON/OFF) */
+    .toggle-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--input-bg);
+      padding: 0.65rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--input-border);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-option input {
+      display: none;
+    }
+
+    .toggle-switch {
+      width: 42px;
+      height: 24px;
+      background: var(--card-border);
+      border-radius: 999px;
+      position: relative;
+      transition: background 0.25s;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.25s;
+    }
+
+    .toggle-option input:checked + .toggle-switch {
+      background: var(--accent);
+    }
+
+    .toggle-option input:checked + .toggle-switch::after {
+      transform: translateX(18px);
+    }
+
+    .toggle-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* 楽器カード */
+    .inst-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .inst-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .inst-title-input {
+      font-size: 1.1rem;
+      font-weight: 700;
+      max-width: 280px;
+    }
+
+    .parts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .part-row {
+      display: grid;
+      grid-template-columns: 80px 80px 1.5fr 1fr 36px;
+      gap: 0.75rem;
+      align-items: start;
+      background: var(--bg);
+      padding: 0.85rem;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .color-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .color-btn-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .color-picker {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: transparent;
+    }
+    .color-picker::-webkit-color-swatch-wrapper { padding: 0; }
+    .color-picker::-webkit-color-swatch { border: 1px solid var(--card-border); border-radius: 6px; }
+
+    .palette-popover {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .color-chip {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .color-chip:hover {
+      transform: scale(1.15);
+    }
+
+    .badge-input {
+      font-weight: 700;
+      text-align: center;
+      border-radius: 8px;
+      padding: 0.45rem 0.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+
+    .names-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      width: 100%;
+    }
+
+    .name-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-remove-name {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 0.2rem 0.4rem;
+      border-radius: 6px;
+      line-height: 1;
+    }
+    .btn-remove-name:hover {
+      color: var(--danger);
+      background: rgba(244, 63, 94, 0.1);
+    }
+
+    .btn-add-name {
+      align-self: flex-start;
+      background: transparent;
+      border: 1px dashed var(--input-border);
+      color: var(--accent);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 0.2rem;
+    }
+    .btn-add-name:hover {
+      background: var(--accent-light);
+      border-color: var(--accent);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.1rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-add-inst {
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 2px dashed var(--accent);
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 2rem;
+    }
+    .btn-add-inst:hover { background: var(--accent); color: white; }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 8px;
+    }
+    .btn-icon:hover { background: rgba(244, 63, 94, 0.1); color: var(--danger); }
+
+    /* プレビュー */
+    .preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.85rem;
+    }
+
+    .preview-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-copy {
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: inherit;
+      transition: all 0.2s;
+    }
+    .btn-copy:hover { background: var(--accent-hover); }
+
+    .preview-content {
+      font-family: 'Consolas', 'Courier New', 'Noto Sans Mono', monospace;
+      font-size: 0.92rem;
+      line-height: 1.7;
+      white-space: pre;
+      overflow-x: auto;
+      color: var(--text);
+      background: var(--input-bg);
+      padding: 1.25rem;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* --- チュートリアルモーダル --- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 540px;
+      width: 90%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent);
+    }
+
+    .tutorial-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tutorial-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      background: var(--bg);
+      padding: 0.85rem;
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+
+    .step-num {
+      background: var(--accent);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .btn-close-modal {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn-close-modal:hover {
+      background: var(--accent-hover);
+    }
+
+    @media (max-width: 768px) {
+      .part-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        position: relative;
+      }
+      .btn-icon { position: absolute; top: 0.5rem; right: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="logo-icon">🎼</div>
+        <span>Part Score Manager</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn-header" id="replayTutorialBtn">
+          <span>❓</span>
+          <span>使い方</span>
+        </button>
+        <button class="btn-header" id="themeToggleBtn">
+          <span id="themeIcon">🌙</span>
+          <span id="themeText">Dark</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 曲追加・切り替えタブバー -->
+    <div class="song-tabs-bar" id="songTabsBar"></div>
+
+    <!-- 設定カード（曲名 + 括弧トグル） -->
+    <div class="card">
+      <div class="grid-settings">
+        <div class="field-group">
+          <label for="songTitle">曲名 (Song Title)</label>
+          <input type="text" id="songTitle" placeholder="曲名を入力">
+        </div>
+        <div>
+          <label>出力表記設定</label>
+          <label class="toggle-option">
+            <input type="checkbox" id="parenthesesToggle" checked>
+            <div class="toggle-switch"></div>
+            <span class="toggle-label">2nd以降を ( ) で囲む</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- 楽器セクション群 -->
+    <div id="instrumentsContainer"></div>
+
+    <!-- 新しい楽器を追加ボタン -->
+    <button class="btn-add-inst" id="addInstrumentBtn">＋ 新しい楽器を追加 (1stから作成)</button>
+
+    <!-- 整形済みテキスト出力プレビュー -->
+    <div class="preview-card">
+      <div class="preview-header">
+        <span class="preview-title">✨ テキスト出力プレビュー (自動整列)</span>
+        <button class="btn-copy" id="copyBtn">📋 テキストコピー</button>
+      </div>
+      <div class="preview-content" id="outputPreview"></div>
+    </div>
+  </div>
+
+  <!-- チュートリアルモーダル -->
+  <div class="modal-overlay" id="tutorialModal">
+    <div class="modal-card">
+      <div class="modal-title">🎼 楽譜パート管理の使い方</div>
+      <div class="tutorial-steps">
+        <div class="tutorial-step">
+          <div class="step-num">1</div>
+          <div class="step-text"><b>曲の追加・切り替え:</b><br>上部のタブから複数の曲を作成・切り替えできます。</div>
+        </div>
+        <div class="tutorial-step">
+          <div class="step-num">2</div>
+          <div class="step-text"><b>パート＆人追加:</b><br>「＋パート追加」で 1st, 2nd を拡張でき、「＋人を追加」で複数人の名前を入力欄ごとに整理できます。</div>
+        </div>
+        <div class="tutorial-step">
+          <div class="step-num">3</div>
+          <div class="step-text"><b>バッジ編集 & ( ) オプション:</b><br>1st/2nd等のバッジ背景色・文字色・テキストをカスタマイズ可能！2nd以降を `(2nd:)` にするか `2nd:` にするかもトグルで切替可能です（Enterで確定）。</div>
+        </div>
+        <div class="tutorial-step">
+          <div class="step-num">4</div>
+          <div class="step-text"><b>コピーして共有:</b><br>プレビュー機能で自動整列されたきれいなテキストを「テキストコピー」ボタン一つで保存できます。</div>
+        </div>
+      </div>
+      <button class="btn-close-modal" id="closeTutorialBtn">使ってみる！</button>
+    </div>
+  </div>
+
+  <script>
+    const presetColors = [
+      '#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#22c55e', '#84cc16',
+      '#eab308', '#f97316', '#ef4444', '#ec4899', '#a855f7', '#64748b'
+    ];
+
+    function getOrdinal(n) {
+      const s = ["th", "st", "nd", "rd"];
+      const v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+
+    // 全角・半角文字表示幅計算
+    function getStringWidth(str) {
+      let width = 0;
+      for (let i = 0; i < str.length; i++) {
+        const code = str.charCodeAt(i);
+        if ((code >= 0x1100 && code <= 0x115F) ||
+            (code >= 0x2E80 && code <= 0xA4CF && code !== 0x3003) ||
+            (code >= 0xAC00 && code <= 0xD7A3) ||
+            (code >= 0xF900 && code <= 0xFAFF) ||
+            (code >= 0xFE10 && code <= 0xFE19) ||
+            (code >= 0xFE30 && code <= 0xFE6F) ||
+            (code >= 0xFF00 && code <= 0xFF60) ||
+            (code >= 0xFFE0 && code <= 0xFFE6)) {
+          width += 2;
+        } else {
+          width += 1;
+        }
+      }
+      return width;
+    }
+
+    function padRightEm(str, targetWidth) {
+      const currentWidth = getStringWidth(str);
+      const paddingNeeded = Math.max(0, targetWidth - currentWidth);
+      return str + ' '.repeat(paddingNeeded);
+    }
+
+    // 初期データ構造 (useParentheses を追加)
+    let songsData = [
+      {
+        id: 'song-1',
+        title: "宝島",
+        useParentheses: true,
+        instruments: [
+          {
+            id: 'inst-1',
+            name: "Alto Sax",
+            parts: [
+              { label: "1st", color: "#6366f1", textColor: "#ffffff", names: ["山田太郎", "佐藤花子"], rightInst: "A.Sax" },
+              { label: "2nd", color: "#6366f1", textColor: "#ffffff", names: ["鈴木一郎"],             rightInst: "A.Sax" },
+              { label: "3rd", color: "#6366f1", textColor: "#ffffff", names: ["高橋次郎"],             rightInst: "T.Sax" }
+            ]
+          }
+        ]
+      }
+    ];
+
+    let currentSongId = 'song-1';
+
+    // DOM要素
+    const songTabsBar = document.getElementById('songTabsBar');
+    const songTitleInput = document.getElementById('songTitle');
+    const parenthesesToggle = document.getElementById('parenthesesToggle');
+    const instrumentsContainer = document.getElementById('instrumentsContainer');
+    const addInstrumentBtn = document.getElementById('addInstrumentBtn');
+    const outputPreviewEl = document.getElementById('outputPreview');
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+    const copyBtn = document.getElementById('copyBtn');
+    
+    const tutorialModal = document.getElementById('tutorialModal');
+    const closeTutorialBtn = document.getElementById('closeTutorialBtn');
+    const replayTutorialBtn = document.getElementById('replayTutorialBtn');
+
+    function getCurrentSong() {
+      return songsData.find(s => s.id === currentSongId) || songsData[0];
+    }
+
+    // アプリ全体の描画
+    function renderApp() {
+      renderTabs();
+
+      const currentSong = getCurrentSong();
+      songTitleInput.value = currentSong.title;
+      parenthesesToggle.checked = currentSong.useParentheses !== false;
+
+      instrumentsContainer.innerHTML = '';
+
+      currentSong.instruments.forEach((inst, instIdx) => {
+        const instCard = document.createElement('div');
+        instCard.className = 'inst-card';
+
+        instCard.innerHTML = `
+          <div class="inst-header">
+            <input type="text" class="inst-title-input" value="${inst.name}" placeholder="楽器名 (例: Flute)" oninput="updateInstrumentName(${instIdx}, this.value)">
+            <div>
+              <button class="btn btn-primary" onclick="addPart(${instIdx})">＋ パート追加</button>
+              ${currentSong.instruments.length > 1 ? `<button class="btn btn-icon" onclick="removeInstrument(${instIdx})" title="楽器を削除"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>` : ''}
+            </div>
+          </div>
+          <div class="parts-list" id="parts-list-${instIdx}"></div>
+        `;
+
+        instrumentsContainer.appendChild(instCard);
+
+        const partsListEl = instCard.querySelector(`#parts-list-${instIdx}`);
+        inst.parts.forEach((part, partIdx) => {
+          const row = document.createElement('div');
+          row.className = 'part-row';
+
+          let colorChipsHtml = '<div class="palette-popover">';
+          presetColors.forEach(c => {
+            colorChipsHtml += `<div class="color-chip" style="background-color: ${c};" onclick="setPartColor(${instIdx}, ${partIdx}, '${c}')" title="${c}"></div>`;
+          });
+          colorChipsHtml += '</div>';
+
+          let namesHtml = '<div class="names-container">';
+          part.names.forEach((name, nameIdx) => {
+            namesHtml += `
+              <div class="name-item">
+                <input type="text" placeholder="名前" value="${name}" oninput="updateName(${instIdx}, ${partIdx}, ${nameIdx}, this.value)">
+                ${part.names.length > 1 ? `<button class="btn-remove-name" onclick="removeName(${instIdx}, ${partIdx},${nameIdx})" title="削除">✕</button>` : ''}
+              </div>
+            `;
+          });
+          namesHtml += `<button class="btn-add-name" onclick="addName(${instIdx}, ${partIdx})">＋ 人を追加</button></div>`;
+
+          row.innerHTML = `
+            <div class="color-controls">
+              <div class="color-btn-wrapper">
+                <span>背景</span>
+                <input type="color" class="color-picker" value="${part.color}" onchange="updatePartField(${instIdx}, ${partIdx}, 'color', this.value)" title="背景色">
+              </div>
+              <div class="color-btn-wrapper">
+                <span>文字</span>
+                <input type="color" class="color-picker" value="${part.textColor || '#ffffff'}" onchange="updatePartField(${instIdx}, ${partIdx}, 'textColor', this.value)" title="文字色">
+              </div>
+              ${colorChipsHtml}
+            </div>
+            
+            <input type="text" class="badge-input" style="background-color: ${part.color}; color: ${part.textColor || '#ffffff'};" value="${part.label}" 
+                   onchange="updatePartField(${instIdx}, ${partIdx}, 'label', this.value)" 
+                   onkeydown="if(event.key==='Enter') this.blur()">
+            
+            ${namesHtml}
+            <input type="text" placeholder="右側の楽器詳細" value="${part.rightInst}" oninput="updatePartField(${instIdx}, ${partIdx}, 'rightInst', this.value)">
+            <button class="btn btn-icon" onclick="removePart(${instIdx}, ${partIdx})" title="パートを削除">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+          `;
+          partsListEl.appendChild(row);
+        });
+      });
+
+      updatePreview();
+    }
+
+    function renderTabs() {
+      songTabsBar.innerHTML = '';
+      songsData.forEach((song) => {
+        const tab = document.createElement('div');
+        tab.className = `song-tab ${song.id === currentSongId ? 'active' : ''}`;
+        tab.innerHTML = `
+          <span onclick="switchSong('${song.id}')">${song.title || '無題の曲'}</span>
+          ${songsData.length > 1 ? `<button class="btn-close-tab" onclick="deleteSong('${song.id}', event)">✕</button>` : ''}
+        `;
+        songTabsBar.appendChild(tab);
+      });
+
+      const addBtn = document.createElement('button');
+      addBtn.className = 'btn-add-song';
+      addBtn.textContent = '＋ 曲を追加';
+      addBtn.onclick = addNewSong;
+      songTabsBar.appendChild(addBtn);
+    }
+
+    function switchSong(id) {
+      currentSongId = id;
+      renderApp();
+    }
+
+    function addNewSong() {
+      const newId = 'song-' + Date.now();
+      songsData.push({
+        id: newId,
+        title: `新しい曲 ${songsData.length + 1}`,
+        useParentheses: true,
+        instruments: [
+          {
+            id: 'inst-' + Date.now(),
+            name: "Flute",
+            parts: [
+              { label: "1st", color: "#6366f1", textColor: "#ffffff", names: [''], rightInst: "" },
+              { label: "2nd", color: "#6366f1", textColor: "#ffffff", names: [''], rightInst: "" }
+            ]
+          }
+        ]
+      });
+      currentSongId = newId;
+      renderApp();
+    }
+
+    function deleteSong(id, event) {
+      event.stopPropagation();
+      if (songsData.length <= 1) return;
+      songsData = songsData.filter(s => s.id !== id);
+      if (currentSongId === id) {
+        currentSongId = songsData[0].id;
+      }
+      renderApp();
+    }
+
+    // イベントリスナー設定
+    songTitleInput.addEventListener('input', (e) => {
+      const currentSong = getCurrentSong();
+      currentSong.title = e.target.value;
+      renderTabs();
+      updatePreview();
+    });
+
+    // カッコトグルの切替
+    parenthesesToggle.addEventListener('change', (e) => {
+      const currentSong = getCurrentSong();
+      currentSong.useParentheses = e.target.checked;
+      updatePreview();
+    });
+
+    window.updateInstrumentName = (instIdx, value) => {
+      const currentSong = getCurrentSong();
+      currentSong.instruments[instIdx].name = value;
+      updatePreview();
+    };
+
+    window.updatePartField = (instIdx, partIdx, field, value) => {
+      const currentSong = getCurrentSong();
+      currentSong.instruments[instIdx].parts[partIdx][field] = value;
+      if (field === 'color' || field === 'textColor' || field === 'label') {
+        renderApp();
+      } else {
+        updatePreview();
+      }
+    };
+
+    window.setPartColor = (instIdx, partIdx, colorHex) => {
+      const currentSong = getCurrentSong();
+      currentSong.instruments[instIdx].parts[partIdx].color = colorHex;
+      renderApp();
+    };
+
+    window.updateName = (instIdx, partIdx, nameIdx, value) => {
+      const currentSong = getCurrentSong();
+      currentSong.instruments[instIdx].parts[partIdx].names[nameIdx] = value;
+      updatePreview();
+    };
+
+    window.addName = (instIdx, partIdx) => {
+      const currentSong = getCurrentSong();
+      currentSong.instruments[instIdx].parts[partIdx].names.push('');
+      renderApp();
+    };
+
+    window.removeName = (instIdx, partIdx, nameIdx) => {
+      const currentSong = getCurrentSong();
+      currentSong.instruments[instIdx].parts[partIdx].names.splice(nameIdx, 1);
+      renderApp();
+    };
+
+    window.addPart = (instIdx) => {
+      const currentSong = getCurrentSong();
+      const parts = currentSong.instruments[instIdx].parts;
+      const nextLabel = getOrdinal(parts.length + 1);
+      const parentColor = parts[0]?.color || presetColors[0];
+      
+      parts.push({
+        label: nextLabel,
+        color: parentColor,
+        textColor: "#ffffff",
+        names: [''],
+        rightInst: ''
+      });
+      renderApp();
+    };
+
+    window.removePart = (instIdx, partIdx) => {
+      const currentSong = getCurrentSong();
+      if (currentSong.instruments[instIdx].parts.length <= 1) return;
+      currentSong.instruments[instIdx].parts.splice(partIdx, 1);
+      renderApp();
+    };
+
+    addInstrumentBtn.addEventListener('click', () => {
+      const currentSong = getCurrentSong();
+      const color = presetColors[currentSong.instruments.length % presetColors.length];
+      currentSong.instruments.push({
+        id: 'inst-' + Date.now(),
+        name: "Saxophone",
+        parts: [
+          { label: "1st", color: color, textColor: "#ffffff", names: [''], rightInst: "" },
+          { label: "2nd", color: color, textColor: "#ffffff", names: [''], rightInst: "" }
+        ]
+      });
+      renderApp();
+    });
+
+    window.removeInstrument = (instIdx) => {
+      const currentSong = getCurrentSong();
+      if (currentSong.instruments.length <= 1) return;
+      currentSong.instruments.splice(instIdx, 1);
+      renderApp();
+    };
+
+    // プレビュー表示生成 (カッコの有無オプション判定を含む)
+    function updatePreview() {
+      const currentSong = getCurrentSong();
+      const title = currentSong.title || '';
+      const useParens = currentSong.useParentheses !== false;
+      
+      let output = `曲名: ${title}\n`;
+      output += `──────────────────────────────────────────────────\n`;
+
+      const TARGET_LEFT_WIDTH = 42; 
+
+      currentSong.instruments.forEach((inst) => {
+        const instName = inst.name || '';
+
+        inst.parts.forEach((part, index) => {
+          const label = part.label || '';
+          const validNames = part.names.filter(n => n.trim() !== '');
+          const namesStr = validNames.join(', ');
+          const rightInstStr = part.rightInst ? `楽器: ${part.rightInst}` : '楽器:';
+
+          let leftPart = '';
+
+          if (index === 0) {
+            // 1stの行： [楽器名] [1st]:[名前]
+            leftPart = `${instName} ${label}:${namesStr}`;
+          } else {
+            // 2nd以降の行： ( ) オプション判定
+            const labelFormatted = useParens ? `(${label}:)` : `${label}:`;
+            const indentSpaces = ' '.repeat(instName.length + 1);
+            leftPart = `${indentSpaces}${labelFormatted}${namesStr}`;
+          }
+
+          const paddedLeft = padRightEm(leftPart, TARGET_LEFT_WIDTH);
+          output += `${paddedLeft}${rightInstStr}\n`;
+        });
+        output += `\n`;
+      });
+
+      outputPreviewEl.textContent = output.trimEnd();
+    }
+
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(outputPreviewEl.textContent);
+      const originalText = copyBtn.textContent;
+      copyBtn.textContent = '✅ コピー完了！';
+      setTimeout(() => copyBtn.textContent = originalText, 1500);
+    });
+
+    // ダーク/ライトモード切り替え
+    let currentTheme = 'dark';
+    themeToggleBtn.addEventListener('click', () => {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      themeIcon.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
+      themeText.textContent = currentTheme === 'dark' ? 'Dark' : 'Light';
+    });
+
+    // チュートリアルモーダル処理
+    function openTutorial() {
+      tutorialModal.classList.add('active');
+    }
+
+    function closeTutorial() {
+      tutorialModal.classList.remove('active');
+      localStorage.setItem('psm_tutorial_seen', 'true');
+    }
+
+    closeTutorialBtn.addEventListener('click', closeTutorial);
+    replayTutorialBtn.addEventListener('click', openTutorial);
+
+    // 初回アクセス時判定
+    function checkFirstTimeVisit() {
+      if (!localStorage.getItem('psm_tutorial_seen')) {
+        openTutorial();
+      }
+    }
+
+    // 初期化実行
+    renderApp();
+    checkFirstTimeVisit();
+  </script>
+</body>
+</html>
