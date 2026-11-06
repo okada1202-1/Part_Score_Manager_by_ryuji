@@ -67,7 +67,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
     .logo {
@@ -93,6 +95,7 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
     .btn-header {
@@ -108,11 +111,52 @@
       font-size: 0.85rem;
       font-weight: 600;
       box-shadow: var(--shadow);
+      transition: all 0.2s;
     }
 
-    .btn-header:hover {
+    .btn-header:hover:not(:disabled) {
       border-color: var(--accent);
       color: var(--accent);
+    }
+
+    .btn-header:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ✨ メインタブ切替 */
+    .app-main-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    .app-tab-btn {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .app-tab-btn.active {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     }
 
     /* 曲タブバー */
@@ -121,8 +165,9 @@
       align-items: center;
       gap: 0.5rem;
       overflow-x: auto;
-      padding-bottom: 0.5rem;
+      padding: 0.25rem 0.25rem 0.5rem 0.25rem;
       margin-bottom: 1rem;
+      border-radius: 14px;
     }
 
     .song-tab {
@@ -210,7 +255,7 @@
       margin-bottom: 0.4rem;
     }
 
-    input[type="text"] {
+    input[type="text"], textarea, select {
       width: 100%;
       background: var(--input-bg);
       border: 1px solid var(--input-border);
@@ -222,12 +267,11 @@
       outline: none;
     }
 
-    input[type="text"]:focus {
+    input[type="text"]:focus, textarea:focus, select:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px var(--accent-light);
     }
 
-    /* トグルスイッチスタイル (カッコON/OFF) */
     .toggle-option {
       display: flex;
       align-items: center;
@@ -240,9 +284,7 @@
       user-select: none;
     }
 
-    .toggle-option input {
-      display: none;
-    }
+    .toggle-option input { display: none; }
 
     .toggle-switch {
       width: 42px;
@@ -265,13 +307,8 @@
       transition: transform 0.25s;
     }
 
-    .toggle-option input:checked + .toggle-switch {
-      background: var(--accent);
-    }
-
-    .toggle-option input:checked + .toggle-switch::after {
-      transform: translateX(18px);
-    }
+    .toggle-option input:checked + .toggle-switch { background: var(--accent); }
+    .toggle-option input:checked + .toggle-switch::after { transform: translateX(18px); }
 
     .toggle-label {
       font-size: 0.875rem;
@@ -312,9 +349,10 @@
       margin-bottom: 1rem;
     }
 
+    /* パート行（スッキリ化） */
     .part-row {
       display: grid;
-      grid-template-columns: 80px 80px 1.5fr 1fr 36px;
+      grid-template-columns: 80px 1fr 80px 1.8fr 36px;
       gap: 0.75rem;
       align-items: start;
       background: var(--bg);
@@ -369,9 +407,7 @@
       cursor: pointer;
       border: 1px solid rgba(255,255,255,0.2);
     }
-    .color-chip:hover {
-      transform: scale(1.15);
-    }
+    .color-chip:hover { transform: scale(1.15); }
 
     .badge-input {
       font-weight: 700;
@@ -395,6 +431,14 @@
       gap: 0.35rem;
     }
 
+    .role-select {
+      width: auto;
+      min-width: 90px;
+      padding: 0.65rem 0.4rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
     .btn-remove-name {
       background: transparent;
       border: none;
@@ -405,10 +449,7 @@
       border-radius: 6px;
       line-height: 1;
     }
-    .btn-remove-name:hover {
-      color: var(--danger);
-      background: rgba(244, 63, 94, 0.1);
-    }
+    .btn-remove-name:hover { color: var(--danger); background: rgba(244, 63, 94, 0.1); }
 
     .btn-add-name {
       align-self: flex-start;
@@ -422,10 +463,7 @@
       cursor: pointer;
       margin-top: 0.2rem;
     }
-    .btn-add-name:hover {
-      background: var(--accent-light);
-      border-color: var(--accent);
-    }
+    .btn-add-name:hover { background: var(--accent-light); border-color: var(--accent); }
 
     .btn {
       display: inline-flex;
@@ -444,8 +482,14 @@
     .btn-primary { background: var(--accent); color: white; }
     .btn-primary:hover { background: var(--accent-hover); }
 
+    .btn-add-inst-wrapper {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
     .btn-add-inst {
-      width: 100%;
+      flex: 1;
       padding: 0.85rem;
       background: var(--accent-light);
       color: var(--accent);
@@ -454,9 +498,23 @@
       font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
-      margin-bottom: 2rem;
     }
     .btn-add-inst:hover { background: var(--accent); color: white; }
+
+    .btn-preset {
+      padding: 0.85rem 1.2rem;
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-preset:hover { border-color: var(--accent); color: var(--accent); }
 
     .btn-icon {
       width: 36px;
@@ -468,7 +526,6 @@
     }
     .btn-icon:hover { background: rgba(244, 63, 94, 0.1); color: var(--danger); }
 
-    /* プレビュー */
     .preview-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -481,11 +538,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0.85rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1rem;
     }
 
     .preview-title {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: var(--accent);
       text-transform: uppercase;
@@ -495,11 +554,57 @@
       gap: 0.5rem;
     }
 
-    .btn-copy {
+    .member-count-badge {
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-left: 0.5rem;
+    }
+
+    .preview-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .segmented-control {
+      display: flex;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      padding: 3px;
+    }
+
+    .segmented-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .segmented-btn.active {
+      background: var(--card-bg);
+      color: var(--text);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .btn-action-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-action {
       padding: 0.45rem 0.9rem;
       font-size: 0.8rem;
-      background: var(--accent);
-      color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -507,9 +612,17 @@
       font-family: inherit;
       transition: all 0.2s;
     }
+
+    .btn-copy { background: var(--accent); color: white; }
     .btn-copy:hover { background: var(--accent-hover); }
 
-    .preview-content {
+    .btn-download { background: #10b981; color: white; }
+    .btn-download:hover { background: #059669; }
+
+    .btn-print { background: #0284c7; color: white; }
+    .btn-print:hover { background: #0369a1; }
+
+    .preview-content-text {
       font-family: 'Consolas', 'Courier New', 'Noto Sans Mono', monospace;
       font-size: 0.92rem;
       line-height: 1.7;
@@ -523,118 +636,276 @@
       box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
     }
 
-    /* --- チュートリアルモーダル --- */
+    .preview-content-html {
+      background: var(--bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      overflow-x: auto;
+    }
+
+    /* 整形用HTMLデザイン */
+    .psm-song-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    .psm-song-card:last-child { margin-bottom: 0; }
+    .psm-song-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .psm-inst-group {
+      background: rgba(15, 20, 34, 0.6);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--card-border);
+      margin-bottom: 1rem;
+    }
+    .psm-inst-group:last-child { margin-bottom: 0; }
+    
+    .psm-row {
+      display: grid;
+      grid-template-columns: 140px 80px 1fr;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .psm-row:last-child { border-bottom: none; }
+    .psm-col-inst { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+    .psm-badge {
+      display: inline-block;
+      padding: 0.3rem 0.6rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .psm-col-names { font-size: 0.95rem; color: var(--text); font-weight: 500; line-height: 1.5; }
+
+    /* モーダル (乗り番マトリックス & プリセット) */
     .modal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-      display: flex;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 10000;
+      display: none;
       justify-content: center;
       align-items: center;
-      z-index: 9999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      padding: 1rem;
     }
 
-    .modal-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .modal-card {
+    .modal-content {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 2rem;
-      max-width: 540px;
-      width: 90%;
+      width: 100%;
+      max-width: 800px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
       box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-      transform: translateY(20px);
-      transition: transform 0.3s ease;
+      overflow: hidden;
     }
 
-    .modal-overlay.active .modal-card {
-      transform: translateY(0);
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .modal-title {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: 700;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
       color: var(--accent);
     }
 
-    .tutorial-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .tutorial-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      background: var(--bg);
-      padding: 0.85rem;
-      border-radius: 12px;
-      border: 1px solid var(--card-border);
-    }
-
-    .step-num {
-      background: var(--accent);
-      color: white;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      font-size: 0.8rem;
-      flex-shrink: 0;
-    }
-
-    .step-text {
-      font-size: 0.9rem;
-      line-height: 1.5;
-      color: var(--text);
-    }
-
     .btn-close-modal {
-      width: 100%;
-      padding: 0.8rem;
-      background: var(--accent);
-      color: white;
+      background: transparent;
       border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.25rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: 8px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .btn-close-modal:hover {
+      color: var(--text);
+      background: var(--input-bg);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    .matrix-table th, .matrix-table td {
+      padding: 0.75rem 0.5rem;
+      border: 1px solid var(--card-border);
+      font-size: 0.9rem;
+    }
+
+    .matrix-table th {
+      background: var(--input-bg);
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .preset-card-item {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
       border-radius: 12px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .preset-card-item:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .preset-name {
       font-weight: 700;
       font-size: 1rem;
-      cursor: pointer;
-      font-family: inherit;
+      color: var(--text);
+      margin-bottom: 0.4rem;
     }
-    .btn-close-modal:hover {
-      background: var(--accent-hover);
+
+    .preset-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ✨ リスト編集タブ用スタイル */
+    .list-editor-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
     }
 
     @media (max-width: 768px) {
-      .part-row {
+      .list-editor-container {
         grid-template-columns: 1fr;
-        gap: 0.5rem;
-        position: relative;
       }
-      .btn-icon { position: absolute; top: 0.5rem; right: 0.5rem; }
+    }
+
+    .editor-box {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+    }
+
+    .editor-box-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .editor-item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      max-height: 320px;
+      overflow-y: auto;
+      margin-top: 0.75rem;
+    }
+
+    .editor-item-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .editor-item-row input {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.88rem;
+    }
+
+    /* 🖨️ A4印刷最適化 CSS */
+    @media print {
+      header, .app-main-tabs, .song-tabs-bar, .card, .btn-add-inst-wrapper, .preview-header, .btn-action-group, .segmented-control, .modal-overlay, #instrumentsContainer, #tourSongConfigCard, #addInstrumentBtn, #appViewListEditor {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        padding: 0 !important;
+      }
+      .container {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+      .preview-card {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        background: transparent !important;
+      }
+      .preview-content-html, .psm-song-card, .psm-inst-group {
+        background: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid #cbd5e1 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+      }
+      .psm-col-inst, .psm-col-names, .psm-song-title {
+        color: #000000 !important;
+      }
+      .psm-badge {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .psm-row { grid-template-columns: 1fr; gap: 0.4rem; }
+      .part-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
+  <!-- 入力候補用 datalist -->
+  <datalist id="preset-names-list"></datalist>
+  <datalist id="preset-instruments-list"></datalist>
 
   <div class="container">
     <header>
@@ -643,9 +914,9 @@
         <span>Part Score Manager</span>
       </div>
       <div class="header-actions">
-        <button class="btn-header" id="replayTutorialBtn">
-          <span>❓</span>
-          <span>使い方</span>
+        <button class="btn-header" id="showMatrixBtn" title="全曲乗り番（出演）一覧">
+          <span>📊</span>
+          <span>乗り番一覧</span>
         </button>
         <button class="btn-header" id="themeToggleBtn">
           <span id="themeIcon">🌙</span>
@@ -654,66 +925,181 @@
       </div>
     </header>
 
-    <!-- 曲追加・切り替えタブバー -->
-    <div class="song-tabs-bar" id="songTabsBar"></div>
+    <!-- ✨ メインタブ -->
+    <div class="app-main-tabs">
+      <button class="app-tab-btn active" id="tabManagerBtn">
+        <span>🎼</span>
+        <span>パート編成管理</span>
+      </button>
+      <button class="app-tab-btn" id="tabListEditorBtn">
+        <span>📝</span>
+        <span>リスト編集 (.json)</span>
+      </button>
+    </div>
 
-    <!-- 設定カード（曲名 + 括弧トグル） -->
-    <div class="card">
-      <div class="grid-settings">
-        <div class="field-group">
-          <label for="songTitle">曲名 (Song Title)</label>
-          <input type="text" id="songTitle" placeholder="曲名を入力">
+    <!-- ==================== VIEW 1: パート編成管理 ==================== -->
+    <div id="appViewPartManager">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <div class="song-tabs-bar" id="songTabsBar" style="margin-bottom:0; flex:1;"></div>
+        <div style="display:flex; gap:0.5rem;">
+          <button class="btn-header" id="undoBtn" title="元に戻す (Ctrl+Z)" disabled><span>↩️</span><span>Undo</span></button>
+          <button class="btn-header" id="redoBtn" title="やり直し (Ctrl+Y)" disabled><span>↪️</span><span>Redo</span></button>
+          <button class="btn-header" id="exportJsonBtn" title="作業データをJSONで保存"><span>📤</span><span>保存(.json)</span></button>
+          <button class="btn-header" id="importJsonBtn" title="JSONファイルから読み込み"><span>📥</span><span>開く(.json)</span></button>
+          <input type="file" id="importJsonInput" accept=".json" style="display: none;">
         </div>
-        <div>
-          <label>出力表記設定</label>
-          <label class="toggle-option">
-            <input type="checkbox" id="parenthesesToggle" checked>
-            <div class="toggle-switch"></div>
-            <span class="toggle-label">2nd以降を ( ) で囲む</span>
-          </label>
+      </div>
+
+      <!-- 設定カード（曲名 + 括弧トグル） -->
+      <div class="card" id="tourSongConfigCard">
+        <div class="grid-settings">
+          <div class="field-group">
+            <label for="songTitle">曲名 (Song Title)</label>
+            <input type="text" id="songTitle" placeholder="曲名を入力 (例: 宝島, 新時代 等)">
+          </div>
+          <div>
+            <label>出力表記設定</label>
+            <label class="toggle-option">
+              <input type="checkbox" id="parenthesesToggle" checked>
+              <div class="toggle-switch"></div>
+              <span class="toggle-label">2nd以降を ( ) で囲む</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 楽器セクション群 -->
+      <div id="instrumentsContainer"></div>
+
+      <!-- 新しい楽器を追加 & プリセットボタン -->
+      <div class="btn-add-inst-wrapper">
+        <button class="btn-add-inst" id="addInstrumentBtn">＋ 新しい楽器を追加 (1stから作成)</button>
+        <button class="btn-preset" id="openPresetModalBtn">🎷 プリセットから作成</button>
+      </div>
+
+      <!-- 出力プレビューコントロール -->
+      <div class="preview-card" id="tourPreviewCard">
+        <div class="preview-header">
+          <div class="preview-title">
+            <span>✨ 出力プレビュー</span>
+            <span class="member-count-badge" id="memberCountBadge">👥 参加: 0名</span>
+          </div>
+          
+          <div class="preview-controls">
+            <div class="segmented-control">
+              <button class="segmented-btn active" id="scopeCurrentBtn">選択中の曲</button>
+              <button class="segmented-btn" id="scopeAllBtn">全曲まとめて出力</button>
+            </div>
+
+            <div class="segmented-control">
+              <button class="segmented-btn active" id="formatTextBtn">テキスト</button>
+              <button class="segmented-btn" id="formatHtmlBtn">HTMLカード (カラー表記)</button>
+            </div>
+
+            <div class="btn-action-group">
+              <button class="btn-action btn-copy" id="copyBtn">📋 コピー</button>
+              <button class="btn-action btn-print" id="printBtn">🖨️ 印刷 / PDF</button>
+              <button class="btn-action btn-download" id="downloadHtmlBtn">📥 HTMLをダウンロード</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="previewOutputContainer"></div>
+      </div>
+    </div>
+
+    <!-- ==================== VIEW 2: リスト編集 (.json) ==================== -->
+    <div id="appViewListEditor" style="display: none;">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; gap:0.75rem;">
+          <div>
+            <h2 style="font-size:1.2rem; font-weight:700; color:var(--text);">📝 入力候補リスト(.json) 編集</h2>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.2rem;">ここで登録した「名前」と「楽器名」はパート編成画面で自動サジェスト表示されます。</p>
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button class="btn btn-primary" id="applyListBtn">✨ ツールに適用</button>
+            <button class="btn-header" id="downloadConfigJsonBtn"><span>📥</span><span>JSON保存</span></button>
+            <button class="btn-header" id="uploadConfigJsonBtn"><span>📤</span><span>JSON読み込み</span></button>
+            <input type="file" id="uploadConfigJsonInput" accept=".json" style="display:none;">
+          </div>
+        </div>
+
+        <div class="list-editor-container">
+          <!-- 👤 名前リスト編集 -->
+          <div class="editor-box">
+            <div class="editor-box-title">
+              <span>👤 名前候補 (<span id="namesCount">0</span>件)</span>
+              <button class="btn-header" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="clearList('names')">全削除</button>
+            </div>
+            
+            <label>改行区切りで一括追加</label>
+            <textarea id="bulkNamesTextarea" rows="4" placeholder="名前を改行区切りで入力&#10;例:&#10;山田太郎&#10;佐藤花子"></textarea>
+            <button class="btn btn-primary" style="width:100%; margin-top:0.4rem; font-size:0.8rem; padding:0.4rem;" onclick="addBulkItems('names')">＋ 一括追加</button>
+
+            <div class="editor-item-list" id="namesListContainer"></div>
+          </div>
+
+          <!-- 🎷 楽器名リスト編集 -->
+          <div class="editor-box">
+            <div class="editor-box-title">
+              <span>🎷 楽器名候補 (<span id="instsCount">0</span>件)</span>
+              <button class="btn-header" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="clearList('instruments')">全削除</button>
+            </div>
+            
+            <label>改行区切りで一括追加</label>
+            <textarea id="bulkInstsTextarea" rows="4" placeholder="楽器名を改行区切りで入力&#10;例:&#10;Alto Sax&#10;Tenor Sax&#10;Trumpet"></textarea>
+            <button class="btn btn-primary" style="width:100%; margin-top:0.4rem; font-size:0.8rem; padding:0.4rem;" onclick="addBulkItems('instruments')">＋ 一括追加</button>
+
+            <div class="editor-item-list" id="instsListContainer"></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 楽器セクション群 -->
-    <div id="instrumentsContainer"></div>
+  </div>
 
-    <!-- 新しい楽器を追加ボタン -->
-    <button class="btn-add-inst" id="addInstrumentBtn">＋ 新しい楽器を追加 (1stから作成)</button>
-
-    <!-- 整形済みテキスト出力プレビュー -->
-    <div class="preview-card">
-      <div class="preview-header">
-        <span class="preview-title">✨ テキスト出力プレビュー (自動整列)</span>
-        <button class="btn-copy" id="copyBtn">📋 テキストコピー</button>
+  <!-- 📊 乗り番一覧モーダル -->
+  <div class="modal-overlay" id="matrixModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">📊 全曲乗り番（出演曲）マトリックス</div>
+        <button class="btn-close-modal" onclick="closeModal('matrixModal')" title="閉じる">✕</button>
       </div>
-      <div class="preview-content" id="outputPreview"></div>
+      <div class="modal-body" id="matrixModalBody"></div>
     </div>
   </div>
 
-  <!-- チュートリアルモーダル -->
-  <div class="modal-overlay" id="tutorialModal">
-    <div class="modal-card">
-      <div class="modal-title">🎼 楽譜パート管理の使い方</div>
-      <div class="tutorial-steps">
-        <div class="tutorial-step">
-          <div class="step-num">1</div>
-          <div class="step-text"><b>曲の追加・切り替え:</b><br>上部のタブから複数の曲を作成・切り替えできます。</div>
-        </div>
-        <div class="tutorial-step">
-          <div class="step-num">2</div>
-          <div class="step-text"><b>パート＆人追加:</b><br>「＋パート追加」で 1st, 2nd を拡張でき、「＋人を追加」で複数人の名前を入力欄ごとに整理できます。</div>
-        </div>
-        <div class="tutorial-step">
-          <div class="step-num">3</div>
-          <div class="step-text"><b>バッジ編集 & ( ) オプション:</b><br>1st/2nd等のバッジ背景色・文字色・テキストをカスタマイズ可能！2nd以降を `(2nd:)` にするか `2nd:` にするかもトグルで切替可能です（Enterで確定）。</div>
-        </div>
-        <div class="tutorial-step">
-          <div class="step-num">4</div>
-          <div class="step-text"><b>コピーして共有:</b><br>プレビュー機能で自動整列されたきれいなテキストを「テキストコピー」ボタン一つで保存できます。</div>
+  <!-- 🎷 プリセット選択モーダル -->
+  <div class="modal-overlay" id="presetModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title">🎷 編成クイックプリセット呼び出し</div>
+        <button class="btn-close-modal" onclick="closeModal('presetModal')" title="閉じる">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="preset-grid">
+          <div class="preset-card-item" onclick="applyPreset('sax4')">
+            <div class="preset-name">サックス四重奏</div>
+            <div class="preset-desc">S.Sax, A.Sax, T.Sax, B.Sax</div>
+          </div>
+          <div class="preset-card-item" onclick="applyPreset('sax5')">
+            <div class="preset-name">サックス五重奏</div>
+            <div class="preset-desc">S.Sax, A.Sax 1/2, T.Sax, B.Sax</div>
+          </div>
+          <div class="preset-card-item" onclick="applyPreset('brass5')">
+            <div class="preset-name">金管五重奏</div>
+            <div class="preset-desc">Tp 1/2, Hr, Tb, Tuba</div>
+          </div>
+          <div class="preset-card-item" onclick="applyPreset('wood5')">
+            <div class="preset-name">木管五重奏</div>
+            <div class="preset-desc">Fl, Ob, Cl, Hr, Fg</div>
+          </div>
+          <div class="preset-card-item" onclick="applyPreset('bigband')">
+            <div class="preset-name">ビッグバンド (サックスセクション)</div>
+            <div class="preset-desc">A.Sax 1/2, T.Sax 1/2, B.Sax</div>
+          </div>
         </div>
       </div>
-      <button class="btn-close-modal" id="closeTutorialBtn">使ってみる！</button>
     </div>
   </div>
 
@@ -729,7 +1115,6 @@
       return n + (s[(v - 20) % 10] || s[v] || s[0]);
     }
 
-    // 全角・半角文字表示幅計算
     function getStringWidth(str) {
       let width = 0;
       for (let i = 0; i < str.length; i++) {
@@ -756,20 +1141,65 @@
       return str + ' '.repeat(paddingNeeded);
     }
 
-    // 初期データ構造 (useParentheses を追加)
+    // 保存用ダイアログヘルパー
+    async function saveWithPicker(content, defaultFilename, mimeType, extension) {
+      if ('showSaveFilePicker' in window) {
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName: defaultFilename,
+            types: [{
+              description: extension.toUpperCase() + ' File',
+              accept: { [mimeType]: ['.' + extension] }
+            }]
+          });
+          const writable = await handle.createWritable();
+          await writable.write(content);
+          await writable.close();
+          return true;
+        } catch (err) {
+          if (err.name === 'AbortError') return false;
+        }
+      }
+
+      const blob = new Blob([content], { type: `${mimeType};charset=utf-8;` });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = defaultFilename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      return true;
+    }
+
+    function parseNameItem(item) {
+      if (typeof item === 'string') {
+        return { name: item, role: '' };
+      }
+      return item || { name: '', role: '' };
+    }
+
+    function formatNameWithRole(item) {
+      const obj = parseNameItem(item);
+      if (!obj.name.trim()) return '';
+      return obj.role ? `${obj.name}${obj.role}` : obj.name;
+    }
+
+    // 初期データ構造
     let songsData = [
       {
         id: 'song-1',
-        title: "宝島",
+        title: "",
         useParentheses: true,
         instruments: [
           {
             id: 'inst-1',
-            name: "Alto Sax",
+            name: "",
             parts: [
-              { label: "1st", color: "#6366f1", textColor: "#ffffff", names: ["山田太郎", "佐藤花子"], rightInst: "A.Sax" },
-              { label: "2nd", color: "#6366f1", textColor: "#ffffff", names: ["鈴木一郎"],             rightInst: "A.Sax" },
-              { label: "3rd", color: "#6366f1", textColor: "#ffffff", names: ["高橋次郎"],             rightInst: "T.Sax" }
+              { label: "1st", color: "#6366f1", textColor: "#ffffff", names: [{ name: "", role: "" }], rightInst: "" },
+              { label: "2nd", color: "#6366f1", textColor: "#ffffff", names: [{ name: "", role: "" }], rightInst: "" },
+              { label: "3rd", color: "#6366f1", textColor: "#ffffff", names: [{ name: "", role: "" }], rightInst: "" }
             ]
           }
         ]
@@ -777,6 +1207,59 @@
     ];
 
     let currentSongId = 'song-1';
+    let previewScope = 'current';
+    let previewFormat = 'text';
+
+    // 履歴管理 (Undo / Redo)
+    let undoStack = [];
+    let redoStack = [];
+    const MAX_STACK_SIZE = 50;
+    let debounceTimer = null;
+
+    function captureState() {
+      return JSON.stringify({ songsData, currentSongId });
+    }
+
+    function pushHistoryState() {
+      const currentState = captureState();
+      if (undoStack.length > 0 && undoStack[undoStack.length - 1] === currentState) return;
+      undoStack.push(currentState);
+      if (undoStack.length > MAX_STACK_SIZE) undoStack.shift();
+      redoStack = [];
+      updateUndoRedoButtons();
+    }
+
+    function scheduleHistoryState() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => { pushHistoryState(); }, 400);
+    }
+
+    function undo() {
+      if (undoStack.length === 0) return;
+      redoStack.push(captureState());
+      const previousState = JSON.parse(undoStack.pop());
+      songsData = previousState.songsData;
+      currentSongId = previousState.currentSongId;
+      renderApp();
+      updateUndoRedoButtons();
+    }
+
+    function redo() {
+      if (redoStack.length === 0) return;
+      undoStack.push(captureState());
+      const nextState = JSON.parse(redoStack.pop());
+      songsData = nextState.songsData;
+      currentSongId = nextState.currentSongId;
+      renderApp();
+      updateUndoRedoButtons();
+    }
+
+    function updateUndoRedoButtons() {
+      const undoBtn = document.getElementById('undoBtn');
+      const redoBtn = document.getElementById('redoBtn');
+      if (undoBtn) undoBtn.disabled = undoStack.length === 0;
+      if (redoBtn) redoBtn.disabled = redoStack.length === 0;
+    }
 
     // DOM要素
     const songTabsBar = document.getElementById('songTabsBar');
@@ -784,21 +1267,55 @@
     const parenthesesToggle = document.getElementById('parenthesesToggle');
     const instrumentsContainer = document.getElementById('instrumentsContainer');
     const addInstrumentBtn = document.getElementById('addInstrumentBtn');
-    const outputPreviewEl = document.getElementById('outputPreview');
+    const previewOutputContainer = document.getElementById('previewOutputContainer');
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIcon = document.getElementById('themeIcon');
     const themeText = document.getElementById('themeText');
     const copyBtn = document.getElementById('copyBtn');
-    
-    const tutorialModal = document.getElementById('tutorialModal');
-    const closeTutorialBtn = document.getElementById('closeTutorialBtn');
-    const replayTutorialBtn = document.getElementById('replayTutorialBtn');
+    const printBtn = document.getElementById('printBtn');
+    const downloadHtmlBtn = document.getElementById('downloadHtmlBtn');
+    const memberCountBadge = document.getElementById('memberCountBadge');
+
+    const undoBtn = document.getElementById('undoBtn');
+    const redoBtn = document.getElementById('redoBtn');
+
+    const exportJsonBtn = document.getElementById('exportJsonBtn');
+    const importJsonBtn = document.getElementById('importJsonBtn');
+    const importJsonInput = document.getElementById('importJsonInput');
+
+    const scopeCurrentBtn = document.getElementById('scopeCurrentBtn');
+    const scopeAllBtn = document.getElementById('scopeAllBtn');
+    const formatTextBtn = document.getElementById('formatTextBtn');
+    const formatHtmlBtn = document.getElementById('formatHtmlBtn');
+
+    const showMatrixBtn = document.getElementById('showMatrixBtn');
+    const openPresetModalBtn = document.getElementById('openPresetModalBtn');
+
+    // メインタブ
+    const tabManagerBtn = document.getElementById('tabManagerBtn');
+    const tabListEditorBtn = document.getElementById('tabListEditorBtn');
+    const appViewPartManager = document.getElementById('appViewPartManager');
+    const appViewListEditor = document.getElementById('appViewListEditor');
+
+    tabManagerBtn.addEventListener('click', () => {
+      tabManagerBtn.classList.add('active');
+      tabListEditorBtn.classList.remove('active');
+      appViewPartManager.style.display = 'block';
+      appViewListEditor.style.display = 'none';
+    });
+
+    tabListEditorBtn.addEventListener('click', () => {
+      tabListEditorBtn.classList.add('active');
+      tabManagerBtn.classList.remove('active');
+      appViewPartManager.style.display = 'none';
+      appViewListEditor.style.display = 'block';
+      renderListEditor();
+    });
 
     function getCurrentSong() {
       return songsData.find(s => s.id === currentSongId) || songsData[0];
     }
 
-    // アプリ全体の描画
     function renderApp() {
       renderTabs();
 
@@ -814,7 +1331,7 @@
 
         instCard.innerHTML = `
           <div class="inst-header">
-            <input type="text" class="inst-title-input" value="${inst.name}" placeholder="楽器名 (例: Flute)" oninput="updateInstrumentName(${instIdx}, this.value)">
+            <input type="text" class="inst-title-input" list="preset-instruments-list" value="${inst.name}" placeholder="楽器グループ名 (省略可)" oninput="updateInstrumentName(${instIdx}, this.value)">
             <div>
               <button class="btn btn-primary" onclick="addPart(${instIdx})">＋ パート追加</button>
               ${currentSong.instruments.length > 1 ? `<button class="btn btn-icon" onclick="removeInstrument(${instIdx})" title="楽器を削除"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>` : ''}
@@ -836,16 +1353,27 @@
           });
           colorChipsHtml += '</div>';
 
-          let namesHtml = '<div class="names-container">';
-          part.names.forEach((name, nameIdx) => {
+          let namesHtml = `<div class="names-container">`;
+          part.names.forEach((nameItem, nameIdx) => {
+            const nameObj = parseNameItem(nameItem);
             namesHtml += `
               <div class="name-item">
-                <input type="text" placeholder="名前" value="${name}" oninput="updateName(${instIdx}, ${partIdx}, ${nameIdx}, this.value)">
-                ${part.names.length > 1 ? `<button class="btn-remove-name" onclick="removeName(${instIdx}, ${partIdx},${nameIdx})" title="削除">✕</button>` : ''}
+                <input type="text" list="preset-names-list" placeholder="名前 (例: 山田太郎)" value="${nameObj.name}" oninput="updateName(${instIdx}, ${partIdx}, ${nameIdx}, this.value)">
+                <select class="role-select" onchange="updateNameRole(${instIdx}, ${partIdx}, ${nameIdx}, this.value)" title="役割/敬称">
+                  <option value="" ${nameObj.role === '' ? 'selected' : ''}>なし</option>
+                  <option value="先輩" ${nameObj.role === '先輩' ? 'selected' : ''}>先輩</option>
+                </select>
+                ${part.names.length > 1 ? `<button class="btn-remove-name" onclick="removeName(${instIdx}, ${partIdx}, ${nameIdx})" title="削除">✕</button>` : ''}
               </div>
             `;
           });
           namesHtml += `<button class="btn-add-name" onclick="addName(${instIdx}, ${partIdx})">＋ 人を追加</button></div>`;
+
+          const removePartBtnHtml = partIdx > 0 ? `
+            <button class="btn btn-icon" onclick="removePart(${instIdx}, ${partIdx})" title="パートを削除">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+          ` : `<div style="width:36px;"></div>`;
 
           row.innerHTML = `
             <div class="color-controls">
@@ -860,21 +1388,21 @@
               ${colorChipsHtml}
             </div>
             
-            <input type="text" class="badge-input" style="background-color: ${part.color}; color: ${part.textColor || '#ffffff'};" value="${part.label}" 
+            <input type="text" list="preset-instruments-list" placeholder="楽器名 (Soprano Sax等)" value="${part.rightInst}" oninput="updatePartField(${instIdx}, ${partIdx}, 'rightInst', this.value)">
+
+            <input type="text" class="badge-input" style="background-color: ${part.color}; color: ${part.textColor || '#ffffff'};" value="${part.label}" placeholder="1st, Solo等" 
                    onchange="updatePartField(${instIdx}, ${partIdx}, 'label', this.value)" 
                    onkeydown="if(event.key==='Enter') this.blur()">
             
             ${namesHtml}
-            <input type="text" placeholder="右側の楽器詳細" value="${part.rightInst}" oninput="updatePartField(${instIdx}, ${partIdx}, 'rightInst', this.value)">
-            <button class="btn btn-icon" onclick="removePart(${instIdx}, ${partIdx})" title="パートを削除">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-            </button>
+            ${removePartBtnHtml}
           `;
           partsListEl.appendChild(row);
         });
       });
 
       updatePreview();
+      updateUndoRedoButtons();
     }
 
     function renderTabs() {
@@ -897,11 +1425,14 @@
     }
 
     function switchSong(id) {
+      if (currentSongId === id) return;
+      pushHistoryState();
       currentSongId = id;
       renderApp();
     }
 
     function addNewSong() {
+      pushHistoryState();
       const newId = 'song-' + Date.now();
       songsData.push({
         id: newId,
@@ -910,10 +1441,10 @@
         instruments: [
           {
             id: 'inst-' + Date.now(),
-            name: "Flute",
+            name: "",
             parts: [
-              { label: "1st", color: "#6366f1", textColor: "#ffffff", names: [''], rightInst: "" },
-              { label: "2nd", color: "#6366f1", textColor: "#ffffff", names: [''], rightInst: "" }
+              { label: "1st", color: "#6366f1", textColor: "#ffffff", names: [{ name: "", role: "" }], rightInst: "" },
+              { label: "2nd", color: "#6366f1", textColor: "#ffffff", names: [{ name: "", role: "" }], rightInst: "" }
             ]
           }
         ]
@@ -925,69 +1456,83 @@
     function deleteSong(id, event) {
       event.stopPropagation();
       if (songsData.length <= 1) return;
+      pushHistoryState();
       songsData = songsData.filter(s => s.id !== id);
-      if (currentSongId === id) {
-        currentSongId = songsData[0].id;
-      }
+      if (currentSongId === id) currentSongId = songsData[0].id;
       renderApp();
     }
 
-    // イベントリスナー設定
     songTitleInput.addEventListener('input', (e) => {
+      pushHistoryState();
       const currentSong = getCurrentSong();
       currentSong.title = e.target.value;
       renderTabs();
       updatePreview();
     });
 
-    // カッコトグルの切替
     parenthesesToggle.addEventListener('change', (e) => {
+      pushHistoryState();
       const currentSong = getCurrentSong();
       currentSong.useParentheses = e.target.checked;
       updatePreview();
     });
 
     window.updateInstrumentName = (instIdx, value) => {
+      scheduleHistoryState();
       const currentSong = getCurrentSong();
       currentSong.instruments[instIdx].name = value;
       updatePreview();
     };
 
     window.updatePartField = (instIdx, partIdx, field, value) => {
+      pushHistoryState();
       const currentSong = getCurrentSong();
       currentSong.instruments[instIdx].parts[partIdx][field] = value;
-      if (field === 'color' || field === 'textColor' || field === 'label') {
-        renderApp();
-      } else {
-        updatePreview();
-      }
+      if (field === 'color' || field === 'textColor' || field === 'label') renderApp();
+      else updatePreview();
     };
 
     window.setPartColor = (instIdx, partIdx, colorHex) => {
+      pushHistoryState();
       const currentSong = getCurrentSong();
       currentSong.instruments[instIdx].parts[partIdx].color = colorHex;
       renderApp();
     };
 
     window.updateName = (instIdx, partIdx, nameIdx, value) => {
+      scheduleHistoryState();
       const currentSong = getCurrentSong();
-      currentSong.instruments[instIdx].parts[partIdx].names[nameIdx] = value;
+      const nameObj = parseNameItem(currentSong.instruments[instIdx].parts[partIdx].names[nameIdx]);
+      nameObj.name = value;
+      currentSong.instruments[instIdx].parts[partIdx].names[nameIdx] = nameObj;
+      updatePreview();
+    };
+
+    window.updateNameRole = (instIdx, partIdx, nameIdx, roleValue) => {
+      pushHistoryState();
+      const currentSong = getCurrentSong();
+      const nameObj = parseNameItem(currentSong.instruments[instIdx].parts[partIdx].names[nameIdx]);
+      nameObj.role = roleValue;
+      currentSong.instruments[instIdx].parts[partIdx].names[nameIdx] = nameObj;
       updatePreview();
     };
 
     window.addName = (instIdx, partIdx) => {
+      pushHistoryState();
       const currentSong = getCurrentSong();
-      currentSong.instruments[instIdx].parts[partIdx].names.push('');
+      currentSong.instruments[instIdx].parts[partIdx].names.push({ name: '', role: '' });
       renderApp();
     };
 
     window.removeName = (instIdx, partIdx, nameIdx) => {
+      pushHistoryState();
       const currentSong = getCurrentSong();
       currentSong.instruments[instIdx].parts[partIdx].names.splice(nameIdx, 1);
       renderApp();
     };
 
     window.addPart = (instIdx) => {
+      pushHistoryState();
       const currentSong = getCurrentSong();
       const parts = currentSong.instruments[instIdx].parts;
       const nextLabel = getOrdinal(parts.length + 1);
@@ -997,28 +1542,31 @@
         label: nextLabel,
         color: parentColor,
         textColor: "#ffffff",
-        names: [''],
+        names: [{ name: '', role: '' }],
         rightInst: ''
       });
       renderApp();
     };
 
     window.removePart = (instIdx, partIdx) => {
+      if (partIdx === 0) return;
       const currentSong = getCurrentSong();
       if (currentSong.instruments[instIdx].parts.length <= 1) return;
+      pushHistoryState();
       currentSong.instruments[instIdx].parts.splice(partIdx, 1);
       renderApp();
     };
 
     addInstrumentBtn.addEventListener('click', () => {
+      pushHistoryState();
       const currentSong = getCurrentSong();
       const color = presetColors[currentSong.instruments.length % presetColors.length];
       currentSong.instruments.push({
         id: 'inst-' + Date.now(),
-        name: "Saxophone",
+        name: "",
         parts: [
-          { label: "1st", color: color, textColor: "#ffffff", names: [''], rightInst: "" },
-          { label: "2nd", color: color, textColor: "#ffffff", names: [''], rightInst: "" }
+          { label: "1st", color: color, textColor: "#ffffff", names: [{ name: '', role: '' }], rightInst: "" },
+          { label: "2nd", color: color, textColor: "#ffffff", names: [{ name: '', role: '' }], rightInst: "" }
         ]
       });
       renderApp();
@@ -1027,59 +1575,510 @@
     window.removeInstrument = (instIdx) => {
       const currentSong = getCurrentSong();
       if (currentSong.instruments.length <= 1) return;
+      pushHistoryState();
       currentSong.instruments.splice(instIdx, 1);
       renderApp();
     };
 
-    // プレビュー表示生成 (カッコの有無オプション判定を含む)
-    function updatePreview() {
+    // --- 🎷 クイックプリセット ---
+    openPresetModalBtn.addEventListener('click', () => {
+      document.getElementById('presetModal').style.display = 'flex';
+    });
+
+    window.closeModal = (id) => {
+      document.getElementById(id).style.display = 'none';
+    };
+
+    window.applyPreset = (type) => {
+      pushHistoryState();
       const currentSong = getCurrentSong();
-      const title = currentSong.title || '';
-      const useParens = currentSong.useParentheses !== false;
       
+      if (type === 'sax4') {
+        currentSong.instruments = [
+          { name: "Soprano Sax", parts: [{ label: "Only", color: "#6366f1", textColor: "#fff", names: [{name:'',role:''}], rightInst: "S.Sax" }] },
+          { name: "Alto Sax", parts: [{ label: "Only", color: "#3b82f6", textColor: "#fff", names: [{name:'',role:''}], rightInst: "A.Sax" }] },
+          { name: "Tenor Sax", parts: [{ label: "Only", color: "#10b981", textColor: "#fff", names: [{name:'',role:''}], rightInst: "T.Sax" }] },
+          { name: "Baritone Sax", parts: [{ label: "Only", color: "#f97316", textColor: "#fff", names: [{name:'',role:''}], rightInst: "B.Sax" }] }
+        ];
+      } else if (type === 'sax5') {
+        currentSong.instruments = [
+          { name: "Soprano Sax", parts: [{ label: "Only", color: "#6366f1", textColor: "#fff", names: [{name:'',role:''}], rightInst: "S.Sax" }] },
+          { name: "Alto Sax", parts: [
+            { label: "1st", color: "#3b82f6", textColor: "#fff", names: [{name:'',role:''}], rightInst: "A.Sax" },
+            { label: "2nd", color: "#3b82f6", textColor: "#fff", names: [{name:'',role:''}], rightInst: "A.Sax" }
+          ] },
+          { name: "Tenor Sax", parts: [{ label: "Only", color: "#10b981", textColor: "#fff", names: [{name:'',role:''}], rightInst: "T.Sax" }] },
+          { name: "Baritone Sax", parts: [{ label: "Only", color: "#f97316", textColor: "#fff", names: [{name:'',role:''}], rightInst: "B.Sax" }] }
+        ];
+      } else if (type === 'brass5') {
+        currentSong.instruments = [
+          { name: "Trumpet", parts: [
+            { label: "1st", color: "#ef4444", textColor: "#fff", names: [{name:'',role:''}], rightInst: "Tp" },
+            { label: "2nd", color: "#ef4444", textColor: "#fff", names: [{name:'',role:''}], rightInst: "Tp" }
+          ] },
+          { name: "Horn", parts: [{ label: "Only", color: "#eab308", textColor: "#fff", names: [{name:'',role:''}], rightInst: "Hr" }] },
+          { name: "Trombone", parts: [{ label: "Only", color: "#3b82f6", textColor: "#fff", names: [{name:'',role:''}], rightInst: "Tb" }] },
+          { name: "Tuba", parts: [{ label: "Only", color: "#64748b", textColor: "#fff", names: [{name:'',role:''}], rightInst: "Tuba" }] }
+        ];
+      } else if (type === 'wood5') {
+        currentSong.instruments = [
+          { name: "Flute", parts: [{ label: "Only", color: "#06b6d4", textColor: "#fff", names: [{name:'',role:''}], rightInst: "Fl" }] },
+          { name: "Oboe", parts: [{ label: "Only", color: "#84cc16", textColor: "#fff", names: [{name:'',role:''}], rightInst: "Ob" }] },
+          { name: "Clarinet", parts: [{ label: "Only", color: "#6366f1", textColor: "#fff", names: [{name:'',role:''}], rightInst: "Cl" }] },
+          { name: "Horn", parts: [{ label: "Only", color: "#eab308", textColor: "#fff", names: [{name:'',role:''}], rightInst: "Hr" }] },
+          { name: "Fagotto", parts: [{ label: "Only", color: "#ec4899", textColor: "#fff", names: [{name:'',role:''}], rightInst: "Fg" }] }
+        ];
+      } else if (type === 'bigband') {
+        currentSong.instruments = [
+          { name: "Alto Sax", parts: [
+            { label: "1st", color: "#3b82f6", textColor: "#fff", names: [{name:'',role:''}], rightInst: "A.Sax" },
+            { label: "3rd", color: "#3b82f6", textColor: "#fff", names: [{name:'',role:''}], rightInst: "A.Sax" }
+          ] },
+          { name: "Tenor Sax", parts: [
+            { label: "2nd", color: "#10b981", textColor: "#fff", names: [{name:'',role:''}], rightInst: "T.Sax" },
+            { label: "4th", color: "#10b981", textColor: "#fff", names: [{name:'',role:''}], rightInst: "T.Sax" }
+          ] },
+          { name: "Baritone Sax", parts: [{ label: "5th", color: "#f97316", textColor: "#fff", names: [{name:'',role:''}], rightInst: "B.Sax" }] }
+        ];
+      }
+
+      closeModal('presetModal');
+      renderApp();
+    };
+
+    // --- 📊 全曲乗り番マトリックス ---
+    showMatrixBtn.addEventListener('click', () => {
+      const allMembers = new Set();
+      songsData.forEach(song => {
+        song.instruments.forEach(inst => {
+          inst.parts.forEach(part => {
+            part.names.forEach(n => {
+              const formatted = formatNameWithRole(n);
+              if (formatted) allMembers.add(formatted);
+            });
+          });
+        });
+      });
+
+      const memberList = Array.from(allMembers).sort();
+      const body = document.getElementById('matrixModalBody');
+
+      if (memberList.length === 0) {
+        body.innerHTML = '<p style="text-align:center; color:var(--text-muted);">入力されているメンバーがありません。</p>';
+      } else {
+        let tableHtml = '<table class="matrix-table"><thead><tr><th>メンバー名</th>';
+        songsData.forEach(s => {
+          tableHtml += `<th>${s.title || '無題'}</th>`;
+        });
+        tableHtml += '</tr></thead><tbody>';
+
+        memberList.forEach(m => {
+          tableHtml += `<tr><td style="font-weight:700; text-align:left; padding-left:1rem;">${m}</td>`;
+          songsData.forEach(song => {
+            let isParticipating = false;
+            let partLabel = '';
+            song.instruments.forEach(inst => {
+              inst.parts.forEach(part => {
+                part.names.forEach(n => {
+                  if (formatNameWithRole(n) === m) {
+                    isParticipating = true;
+                    partLabel = part.rightInst || part.label;
+                  }
+                });
+              });
+            });
+            tableHtml += isParticipating 
+              ? `<td style="color:#10b981; font-weight:700;">◯ <span style="font-size:0.75rem; color:var(--text-muted);">(${partLabel})</span></td>` 
+              : `<td style="color:var(--card-border);">-</td>`;
+          });
+          tableHtml += '</tr>';
+        });
+
+        tableHtml += '</tbody></table>';
+        body.innerHTML = tableHtml;
+      }
+
+      document.getElementById('matrixModal').style.display = 'flex';
+    });
+
+    // --- ✨ VIEW 2: リスト編集 (.json) ロジック ---
+    let presetNamesList = JSON.parse(localStorage.getItem('psm_preset_names') || '[]');
+    let presetInstsList = JSON.parse(localStorage.getItem('psm_preset_insts') || '["Soprano Sax", "Alto Sax", "Tenor Sax", "Baritone Sax", "Flute", "Clarinet", "Trumpet", "Trombone", "Horn", "Tuba"]');
+
+    function updateDatalists() {
+      const namesDatalist = document.getElementById('preset-names-list');
+      if (namesDatalist) {
+        namesDatalist.innerHTML = presetNamesList.map(n => `<option value="${n}">`).join('');
+      }
+
+      const instsDatalist = document.getElementById('preset-instruments-list');
+      if (instsDatalist) {
+        instsDatalist.innerHTML = presetInstsList.map(i => `<option value="${i}">`).join('');
+      }
+    }
+
+    function renderListEditor() {
+      // 名前リスト描画
+      document.getElementById('namesCount').textContent = presetNamesList.length;
+      const namesContainer = document.getElementById('namesListContainer');
+      namesContainer.innerHTML = '';
+      presetNamesList.forEach((name, idx) => {
+        const row = document.createElement('div');
+        row.className = 'editor-item-row';
+        row.innerHTML = `
+          <input type="text" value="${name}" onchange="updateListItem('names', ${idx}, this.value)">
+          <button class="btn-remove-name" onclick="removeListItem('names', ${idx})">✕</button>
+        `;
+        namesContainer.appendChild(row);
+      });
+
+      // 楽器リスト描画
+      document.getElementById('instsCount').textContent = presetInstsList.length;
+      const instsContainer = document.getElementById('instsListContainer');
+      instsContainer.innerHTML = '';
+      presetInstsList.forEach((inst, idx) => {
+        const row = document.createElement('div');
+        row.className = 'editor-item-row';
+        row.innerHTML = `
+          <input type="text" value="${inst}" onchange="updateListItem('instruments', ${idx}, this.value)">
+          <button class="btn-remove-name" onclick="removeListItem('instruments', ${idx})">✕</button>
+        `;
+        instsContainer.appendChild(row);
+      });
+    }
+
+    window.addBulkItems = (type) => {
+      const textareaId = type === 'names' ? 'bulkNamesTextarea' : 'bulkInstsTextarea';
+      const text = document.getElementById(textareaId).value;
+      if (!text.trim()) return;
+
+      const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+      if (type === 'names') {
+        presetNamesList.push(...lines);
+      } else {
+        presetInstsList.push(...lines);
+      }
+
+      document.getElementById(textareaId).value = '';
+      saveAndSyncLists();
+    };
+
+    window.updateListItem = (type, idx, val) => {
+      if (type === 'names') presetNamesList[idx] = val.trim();
+      else presetInstsList[idx] = val.trim();
+      saveAndSyncLists();
+    };
+
+    window.removeListItem = (type, idx) => {
+      if (type === 'names') presetNamesList.splice(idx, 1);
+      else presetInstsList.splice(idx, 1);
+      saveAndSyncLists();
+    };
+
+    window.clearList = (type) => {
+      if (!confirm('全項目を削除してもよろしいですか？')) return;
+      if (type === 'names') presetNamesList = [];
+      else presetInstsList = [];
+      saveAndSyncLists();
+    };
+
+    function saveAndSyncLists() {
+      localStorage.setItem('psm_preset_names', JSON.stringify(presetNamesList));
+      localStorage.setItem('psm_preset_insts', JSON.stringify(presetInstsList));
+      updateDatalists();
+      renderListEditor();
+    }
+
+    document.getElementById('applyListBtn').addEventListener('click', () => {
+      saveAndSyncLists();
+      alert(`✨ 入力候補リスト（名前 ${presetNamesList.length}件 / 楽器 ${presetInstsList.length}件）をツールに適用しました！`);
+      tabManagerBtn.click();
+    });
+
+    document.getElementById('downloadConfigJsonBtn').addEventListener('click', async () => {
+      const configData = {
+        names: presetNamesList,
+        instruments: presetInstsList
+      };
+      const jsonStr = JSON.stringify(configData, null, 2);
+      await saveWithPicker(jsonStr, '入力候補リスト.json', 'application/json', 'json');
+    });
+
+    const uploadConfigJsonBtn = document.getElementById('uploadConfigJsonBtn');
+    const uploadConfigJsonInput = document.getElementById('uploadConfigJsonInput');
+
+    uploadConfigJsonBtn.addEventListener('click', () => uploadConfigJsonInput.click());
+    uploadConfigJsonInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          if (Array.isArray(parsed)) {
+            // 単純配列の場合、名前リストとして読込
+            presetNamesList = parsed.map(n => String(n).trim()).filter(Boolean);
+          } else if (parsed && typeof parsed === 'object') {
+            if (Array.isArray(parsed.names)) presetNamesList = parsed.names.map(n => String(n).trim()).filter(Boolean);
+            if (Array.isArray(parsed.instruments)) presetInstsList = parsed.instruments.map(i => String(i).trim()).filter(Boolean);
+          }
+          saveAndSyncLists();
+          alert(`📁 入力候補リストを読み込みました！`);
+        } catch (err) {
+          alert('⚠️ JSONファイルの読み込みに失敗しました。');
+        }
+        uploadConfigJsonInput.value = '';
+      };
+      reader.readAsText(file);
+    });
+
+    // --- 作業データ JSON ---
+    exportJsonBtn.addEventListener('click', async () => {
+      const exportData = {
+        version: "1.0",
+        exportedAt: new Date().toISOString(),
+        songsData: songsData,
+        currentSongId: currentSongId
+      };
+      
+      const jsonStr = JSON.stringify(exportData, null, 2);
+      const todayStr = new Date().toISOString().slice(0, 10);
+      const fileName = `パート管理作業データ_${todayStr}.json`;
+
+      await saveWithPicker(jsonStr, fileName, 'application/json', 'json');
+    });
+
+    importJsonBtn.addEventListener('click', () => { importJsonInput.click(); });
+
+    importJsonInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          if (parsed && parsed.songsData && Array.isArray(parsed.songsData)) {
+            pushHistoryState();
+            songsData = parsed.songsData;
+            if (parsed.currentSongId && songsData.some(s => s.id === parsed.currentSongId)) {
+              currentSongId = parsed.currentSongId;
+            } else if (songsData.length > 0) {
+              currentSongId = songsData[0].id;
+            }
+            renderApp();
+            alert('📁 作業データ(.json)を読み込みました！');
+          }
+        } catch (err) {
+          alert('⚠️ ファイル読み込みに失敗しました。');
+        }
+        importJsonInput.value = '';
+      };
+      reader.readAsText(file);
+    });
+
+    function generateTextForSong(song) {
+      const title = song.title || '';
+      const useParens = song.useParentheses !== false;
+
       let output = `曲名: ${title}\n`;
       output += `──────────────────────────────────────────────────\n`;
 
-      const TARGET_LEFT_WIDTH = 42; 
-
-      currentSong.instruments.forEach((inst) => {
+      song.instruments.forEach((inst) => {
         const instName = inst.name || '';
 
         inst.parts.forEach((part, index) => {
           const label = part.label || '';
-          const validNames = part.names.filter(n => n.trim() !== '');
+          const validNames = part.names
+            .map(formatNameWithRole)
+            .filter(n => n.trim() !== '');
           const namesStr = validNames.join(', ');
-          const rightInstStr = part.rightInst ? `楽器: ${part.rightInst}` : '楽器:';
+          
+          const instDisplay = part.rightInst || (index === 0 ? instName : '');
+          const labelFormatted = (index > 0 && useParens) ? `(${label}:)` : `${label}:`;
 
-          let leftPart = '';
+          const paddedInst = padRightEm(instDisplay, 16);
+          const paddedLabel = padRightEm(labelFormatted, 8);
 
-          if (index === 0) {
-            // 1stの行： [楽器名] [1st]:[名前]
-            leftPart = `${instName} ${label}:${namesStr}`;
-          } else {
-            // 2nd以降の行： ( ) オプション判定
-            const labelFormatted = useParens ? `(${label}:)` : `${label}:`;
-            const indentSpaces = ' '.repeat(instName.length + 1);
-            leftPart = `${indentSpaces}${labelFormatted}${namesStr}`;
-          }
-
-          const paddedLeft = padRightEm(leftPart, TARGET_LEFT_WIDTH);
-          output += `${paddedLeft}${rightInstStr}\n`;
+          output += `${paddedInst} ${paddedLabel} ${namesStr}\n`;
         });
         output += `\n`;
       });
 
-      outputPreviewEl.textContent = output.trimEnd();
+      return output.trimEnd();
     }
 
+    function generateHtmlForSong(song) {
+      const title = song.title || '';
+      const useParens = song.useParentheses !== false;
+
+      let html = `<div class="psm-song-card">\n`;
+      html += `  <div class="psm-song-title">曲名: ${title}</div>\n`;
+
+      song.instruments.forEach((inst) => {
+        const instName = inst.name || '';
+        html += `  <div class="psm-inst-group">\n`;
+
+        inst.parts.forEach((part, index) => {
+          const label = part.label || '';
+          const validNames = part.names
+            .map(formatNameWithRole)
+            .filter(n => n.trim() !== '');
+          const namesStr = validNames.join(', ');
+          
+          const instDisplay = part.rightInst || (index === 0 ? instName : '');
+          const labelFormatted = (index > 0 && useParens) ? `(${label})` : label;
+          const bg = part.color || '#6366f1';
+          const tc = part.textColor || '#ffffff';
+
+          html += `    <div class="psm-row">\n`;
+          html += `      <div class="psm-col-inst">${instDisplay}</div>\n`;
+          html += `      <div><span class="psm-badge" style="background-color: ${bg}; color: ${tc};">${labelFormatted}</span></div>\n`;
+          html += `      <div class="psm-col-names">${namesStr}</div>\n`;
+          html += `    </div>\n`;
+        });
+
+        html += `  </div>\n`;
+      });
+
+      html += `</div>`;
+      return html;
+    }
+
+    function generateFullHtmlDocument(targetSongs) {
+      const bodyContent = targetSongs.map(song => generateHtmlForSong(song)).join('\n');
+      return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>楽譜パート一覧</title>
+  <style>
+    :root {
+      --bg: #0b0f19; --card-bg: #151c2c; --card-border: #232d42;
+      --text: #f1f5f9; --text-muted: #94a3b8; --accent: #6366f1;
+      --font: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+    }
+    body { font-family: var(--font); background-color: var(--bg); color: var(--text); padding: 2rem 1rem; margin: 0; display: flex; justify-content: center; }
+    .psm-container { width: 100%; max-width: 900px; }
+    .psm-song-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    .psm-song-title { font-size: 1.15rem; font-weight: 700; color: var(--accent); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--card-border); }
+    .psm-inst-group { background: rgba(15, 20, 34, 0.6); border-radius: 12px; padding: 0.75rem 1rem; border: 1px solid var(--card-border); margin-bottom: 1rem; }
+    .psm-inst-group:last-child { margin-bottom: 0; }
+    .psm-row { display: grid; grid-template-columns: 140px 80px 1fr; gap: 1rem; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .psm-row:last-child { border-bottom: none; }
+    .psm-col-inst { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+    .psm-badge { display: inline-block; padding: 0.3rem 0.6rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.3); width: 100%; box-sizing: border-box; }
+    .psm-col-names { font-size: 0.95rem; color: var(--text); font-weight: 500; line-height: 1.5; }
+    @media (max-width: 640px) { .psm-row { grid-template-columns: 1fr; gap: 0.4rem; } }
+  </style>
+</head>
+<body>
+  <div class="psm-container">
+    ${bodyContent}
+  </div>
+</body>
+</html>`;
+    }
+
+    function updatePreview() {
+      const targetSongs = previewScope === 'all' ? songsData : [getCurrentSong()];
+      previewOutputContainer.innerHTML = '';
+
+      const currentSongMembers = new Set();
+      targetSongs.forEach(song => {
+        song.instruments.forEach(inst => {
+          inst.parts.forEach(part => {
+            part.names.forEach(n => {
+              const formatted = formatNameWithRole(n);
+              if (formatted) currentSongMembers.add(formatted);
+            });
+          });
+        });
+      });
+      memberCountBadge.textContent = `👥 参加: ${currentSongMembers.size}名`;
+
+      if (previewFormat === 'text') {
+        let combinedText = targetSongs.map(song => generateTextForSong(song)).join('\n\n==================================================\n\n');
+        const pre = document.createElement('div');
+        pre.className = 'preview-content-text';
+        pre.textContent = combinedText;
+        previewOutputContainer.appendChild(pre);
+      } else {
+        const container = document.createElement('div');
+        container.className = 'preview-content-html';
+        let combinedHtml = targetSongs.map(song => generateHtmlForSong(song)).join('\n');
+        container.innerHTML = combinedHtml;
+        previewOutputContainer.appendChild(container);
+      }
+    }
+
+    scopeCurrentBtn.addEventListener('click', () => {
+      previewScope = 'current';
+      scopeCurrentBtn.classList.add('active'); scopeAllBtn.classList.remove('active');
+      updatePreview();
+    });
+
+    scopeAllBtn.addEventListener('click', () => {
+      previewScope = 'all';
+      scopeAllBtn.classList.add('active'); scopeCurrentBtn.classList.remove('active');
+      updatePreview();
+    });
+
+    formatTextBtn.addEventListener('click', () => {
+      previewFormat = 'text';
+      formatTextBtn.classList.add('active'); formatHtmlBtn.classList.remove('active');
+      updatePreview();
+    });
+
+    formatHtmlBtn.addEventListener('click', () => {
+      previewFormat = 'html';
+      formatHtmlBtn.classList.add('active'); formatTextBtn.classList.remove('active');
+      updatePreview();
+    });
+
     copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(outputPreviewEl.textContent);
+      const targetSongs = previewScope === 'all' ? songsData : [getCurrentSong()];
+      let copyText = previewFormat === 'text'
+        ? targetSongs.map(song => generateTextForSong(song)).join('\n\n==================================================\n\n')
+        : generateFullHtmlDocument(targetSongs);
+
+      navigator.clipboard.writeText(copyText);
       const originalText = copyBtn.textContent;
       copyBtn.textContent = '✅ コピー完了！';
       setTimeout(() => copyBtn.textContent = originalText, 1500);
     });
 
-    // ダーク/ライトモード切り替え
+    printBtn.addEventListener('click', () => {
+      window.print();
+    });
+
+    downloadHtmlBtn.addEventListener('click', async () => {
+      const targetSongs = previewScope === 'all' ? songsData : [getCurrentSong()];
+      const fullHtmlContent = generateFullHtmlDocument(targetSongs);
+
+      const fileName = previewScope === 'all' 
+        ? '全曲楽譜パート編成一覧.html' 
+        : `${targetSongs[0]?.title || '楽譜パート'}_編成一覧.html`;
+
+      await saveWithPicker(fullHtmlContent, fileName, 'text/html', 'html');
+    });
+
+    undoBtn.addEventListener('click', undo);
+    redoBtn.addEventListener('click', redo);
+
+    document.addEventListener('keydown', (e) => {
+      const isCmdOrCtrl = e.ctrlKey || e.metaKey;
+      if (!isCmdOrCtrl) return;
+      const key = e.key.toLowerCase();
+      if (key === 'y' || (e.shiftKey && key === 'z')) {
+        e.preventDefault(); redo();
+      } else if (key === 'z' && !e.shiftKey) {
+        e.preventDefault(); undo();
+      }
+    });
+
     let currentTheme = 'dark';
     themeToggleBtn.addEventListener('click', () => {
       currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -1088,29 +2087,8 @@
       themeText.textContent = currentTheme === 'dark' ? 'Dark' : 'Light';
     });
 
-    // チュートリアルモーダル処理
-    function openTutorial() {
-      tutorialModal.classList.add('active');
-    }
-
-    function closeTutorial() {
-      tutorialModal.classList.remove('active');
-      localStorage.setItem('psm_tutorial_seen', 'true');
-    }
-
-    closeTutorialBtn.addEventListener('click', closeTutorial);
-    replayTutorialBtn.addEventListener('click', openTutorial);
-
-    // 初回アクセス時判定
-    function checkFirstTimeVisit() {
-      if (!localStorage.getItem('psm_tutorial_seen')) {
-        openTutorial();
-      }
-    }
-
-    // 初期化実行
+    updateDatalists();
     renderApp();
-    checkFirstTimeVisit();
   </script>
 </body>
 </html>
